@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Version=1.0
+Name=Roku Remote
+Type=Application
+Comment=Roku Remote
+Exec=/usr/bin/rokuremote
+Icon=access
+Terminal=false
+Categories=AudioVideo
+StartupNotify=false
