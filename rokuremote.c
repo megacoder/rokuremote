@@ -64,7 +64,11 @@ void sendletter (char *msg, GtkEntry *object, gpointer user_data)
     struct addrinfo hints, *servinfo, *p;
     char s[INET6_ADDRSTRLEN];
 
-    if ((rv = getaddrinfo(hostname, "8080", &hints, &servinfo)) == 0)
+    memset(&hints, 0, sizeof hints);
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+
+    if ((rv = getaddrinfo(hostname, "8060", &hints, &servinfo)) == 0)
     {
         p = servinfo;
 
@@ -109,7 +113,7 @@ void on_delete_clicked (GtkEntry *object, gpointer user_data)
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
 
-    if ((rv = getaddrinfo(hostname, "8080", &hints, &servinfo)) == 0)
+    if ((rv = getaddrinfo(hostname, "8060", &hints, &servinfo)) == 0)
     {
         p = servinfo;
 
