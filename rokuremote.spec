@@ -1,6 +1,6 @@
 Name: rokuremote		
 Version: 0.6
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary: A Remote for your Roku	
 
 Group: Multimedia
