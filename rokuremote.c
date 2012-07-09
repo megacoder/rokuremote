@@ -28,8 +28,20 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <stdbool.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <sys/stat.h>
 
 GtkBuilder *builder;
+
+void *get_in_addr(struct sockaddr *sa)
+{
+    if (sa->sa_family == AF_INET) {
+        return &(((struct sockaddr_in*)sa)->sin_addr);
+    }
+
+    return &(((struct sockaddr_in6*)sa)->sin6_addr);
+}
 
 void on_rokuremote_destroy_event() {
           gtk_main_quit();
@@ -47,17 +59,39 @@ void sendletter (char *msg, GtkEntry *object, gpointer user_data)
 
     GtkWidget  *textEntry = GTK_WIDGET( gtk_builder_get_object( builder, "textentry" ) );
     char *hostname = g_strdup (gtk_entry_get_text(GTK_ENTRY(textEntry)));
+    
+    int sockfd, numbytes, rv;
+    struct addrinfo hints, *servinfo, *p;
+    char s[INET6_ADDRSTRLEN];
 
-    int clientSock=socket(AF_INET,SOCK_STREAM, 0);
-    struct sockaddr_in serv_addr;
+    if ((rv = getaddrinfo(hostname, "8080", &hints, &servinfo)) == 0)
+    {
+        p = servinfo;
 
-    serv_addr.sin_family=AF_INET;
-    serv_addr.sin_port=htons(8060);
-    serv_addr.sin_addr.s_addr=inet_addr(hostname);
+        sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
 
-    connect(clientSock, (struct sockaddr*)&serv_addr, sizeof(struct sockaddr));
-    write(clientSock, cmd, strlen(cmd));
-    close(clientSock);
+        if (connect(sockfd, p->ai_addr, p->ai_addrlen) == 0)
+            {
+            connect(sockfd, p->ai_addr, p->ai_addrlen);
+
+            inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr), s, sizeof s);
+
+            freeaddrinfo(servinfo);
+
+            send(sockfd, cmd, strlen(cmd), 0);
+
+            close(sockfd);
+        }
+        else
+        {
+
+        }
+    }
+    else
+    {
+
+    }
+
 }
 
 void on_delete_clicked (GtkEntry *object, gpointer user_data)
@@ -67,16 +101,42 @@ void on_delete_clicked (GtkEntry *object, gpointer user_data)
     GtkWidget  *textEntry = GTK_WIDGET( gtk_builder_get_object( builder, "textentry" ) );
     char *hostname = g_strdup (gtk_entry_get_text(GTK_ENTRY(textEntry)));
 
-    int clientSock=socket(AF_INET,SOCK_STREAM, 0);
-    struct sockaddr_in serv_addr;
+    int sockfd, numbytes, rv;
+    struct addrinfo hints, *servinfo, *p;
+    char s[INET6_ADDRSTRLEN];
 
-    serv_addr.sin_family=AF_INET;
-    serv_addr.sin_port=htons(8060);
-    serv_addr.sin_addr.s_addr=inet_addr(hostname);
+    memset(&hints, 0, sizeof hints);
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
 
-    connect(clientSock, (struct sockaddr*)&serv_addr, sizeof(struct sockaddr));
-    write(clientSock, cmd, strlen(cmd));
-    close(clientSock);
+    if ((rv = getaddrinfo(hostname, "8080", &hints, &servinfo)) == 0)
+    {
+        p = servinfo;
+
+        sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
+
+        if (connect(sockfd, p->ai_addr, p->ai_addrlen) == 0)
+            {
+            connect(sockfd, p->ai_addr, p->ai_addrlen);
+
+            inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr), s, sizeof s);
+
+            freeaddrinfo(servinfo);
+
+            send(sockfd, cmd, strlen(cmd), 0);
+
+            close(sockfd);
+        }
+        else
+        {
+
+        }
+    }
+    else
+    {
+
+    }
+
 }
 
 void on_space_clicked (GtkEntry *object, gpointer user_data)
@@ -277,16 +337,47 @@ void sendcommand (char *msg, GtkEntry *object, gpointer user_data)
     GtkWidget  *textEntry = GTK_WIDGET( gtk_builder_get_object( builder, "textentry" ) );
     char *hostname = g_strdup (gtk_entry_get_text(GTK_ENTRY(textEntry)));
 
-    int clientSock=socket(AF_INET,SOCK_STREAM, 0);
-    struct sockaddr_in serv_addr;
+    int sockfd, numbytes, rv;
+    struct addrinfo hints, *servinfo, *p;
+    char s[INET6_ADDRSTRLEN];
 
-    serv_addr.sin_family=AF_INET;
-    serv_addr.sin_port=htons(8080);
-    serv_addr.sin_addr.s_addr=inet_addr(hostname);
+    memset(&hints, 0, sizeof hints);
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
 
-    connect(clientSock, (struct sockaddr*)&serv_addr, sizeof(struct sockaddr));
-    write(clientSock, cmd, strlen(cmd));
-    close(clientSock);
+    if ((rv = getaddrinfo(hostname, "8080", &hints, &servinfo)) == 0)
+    {
+        p = servinfo;
+
+        sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
+
+        if (connect(sockfd, p->ai_addr, p->ai_addrlen) == 0)
+            {
+            connect(sockfd, p->ai_addr, p->ai_addrlen);
+
+            inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr), s, sizeof s);
+
+            freeaddrinfo(servinfo);
+
+            send(sockfd, cmd, strlen(cmd), 0);
+
+            close(sockfd);
+        }
+        else
+        {
+            GtkWidget *bad_hostname;
+            bad_hostname = GTK_WIDGET(gtk_builder_get_object( builder, "bad_hostname" ));
+            gtk_widget_set_visible ( bad_hostname, true);
+   
+        }
+    }
+    else
+    {
+        GtkWidget *bad_address;
+        bad_address = GTK_WIDGET(gtk_builder_get_object( builder, "bad_address" ));
+        gtk_widget_set_visible ( bad_address, true);
+    }
+    
 }
 
 void on_pause_clicked(GtkEntry *object, gpointer user_data)
@@ -372,14 +463,64 @@ void on_close_clicked()
     gtk_widget_set_visible ( keywindow, false);
 }
 
+void close_bad_hostname()
+{
+    GtkWidget *bad_hostname;
+    bad_hostname = GTK_WIDGET(gtk_builder_get_object( builder, "bad_hostname" ));
+    gtk_widget_set_visible ( bad_hostname, false);
+}
+
+void close_bad_address()
+{
+    GtkWidget *bad_address;
+    bad_address = GTK_WIDGET(gtk_builder_get_object( builder, "bad_address" ));
+    gtk_widget_set_visible ( bad_address, false);
+}
+
+void save_clicked(GtkEntry *object, gpointer user_data)
+{
+    GtkWidget  *textEntry = GTK_WIDGET( gtk_builder_get_object( builder, "textentry" ) );
+    char *hostname = g_strdup (gtk_entry_get_text(GTK_ENTRY(textEntry)));
+
+    char addresspath[1024];
+    strcpy(addresspath, (getenv ("HOME")));
+    strcat (addresspath, "/.rokuremote/address");
+
+    FILE *addressfilew;
+    addressfilew = fopen(addresspath, "w");
+    fputs(hostname, addressfilew);
+    fclose(addressfilew);
+}
+
 int
 main( int    argc,
       char **argv )
 {
     GtkWidget  *window;
     GError     *error = NULL;
-    GtkWidget  *textEntry;
 
+    char rokuhome[1024];
+    strcpy(rokuhome, (getenv ("HOME")));
+    strcat (rokuhome, "/.rokuremote");
+    mkdir(rokuhome,0750);
+
+    char addresspath[256];
+    strcpy (addresspath, rokuhome);
+    strcat (addresspath, "/address");
+   
+    FILE *addressfile;
+    
+    char address[256];
+
+    if (addressfile = fopen(addresspath, "r"))
+    {
+        fgets(address, 256, addressfile);
+        fclose(addressfile);
+    }
+    else
+    {
+        strcpy (address,"Enter Roku's IP or Hostname");
+    }
     /* Init GTK+ */
     gtk_init( &argc, &argv );
 
@@ -401,6 +542,9 @@ main( int    argc,
 
     /* Show window. All other widgets are automatically shown by GtkBuilder */
     gtk_widget_show( window );
+
+    GtkWidget *textEntry = GTK_WIDGET( gtk_builder_get_object( builder, "textentry" ) );
+    gtk_entry_set_text(GTK_ENTRY(textEntry), address);
 
     /* Start main loop */
     gtk_main();
