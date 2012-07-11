@@ -1,6 +1,6 @@
 Name: rokuremote		
-Version: 0.6
-Release:	2%{?dist}
+Version: 0.7
+Release: 1%{?dist}
 Summary: A Remote for your Roku	
 
 Group: Multimedia
@@ -34,6 +34,8 @@ cp rokuremote.desktop %{buildroot}/%{_datadir}/applications/
 %doc %{_datadir}/man/man1/rokuremote.1.gz
 %doc %{_datadir}/rokuremote/rokuremote.c
 %changelog
+* Wed Jul 11 2012 jason@montleon.com 0.7-1
+- Cleaned up rokuremote.c
 * Sun Jul 08 2012 jason@montleon.com 0.5-1
 - Add keyboard, man page, and hot keys
 * Sat Jul 07 2012 jason@montleon.com 0.1-1
