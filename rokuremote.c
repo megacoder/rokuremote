@@ -34,416 +34,7 @@
 
 GtkBuilder *builder;
 
-void *get_in_addr(struct sockaddr *sa)
-{
-    if (sa->sa_family == AF_INET) {
-        return &(((struct sockaddr_in*)sa)->sin_addr);
-    }
-
-    return &(((struct sockaddr_in6*)sa)->sin6_addr);
-}
-
-void on_rokuremote_destroy_event() {
-          gtk_main_quit();
-}
-
-void sendletter (char *msg, GtkEntry *object, gpointer user_data)
-{
-    char *press = "POST /keypress/Lit_";
-    char *nline = " HTTP/1.1\r\n\r\n";
-    char cmd[100];
-
-    strcpy(cmd, press);
-    strcat(cmd, msg);
-    strcat(cmd, nline);
-
-    GtkWidget  *textEntry = GTK_WIDGET( gtk_builder_get_object( builder, "textentry" ) );
-    char *hostname = g_strdup (gtk_entry_get_text(GTK_ENTRY(textEntry)));
-    
-    int sockfd, numbytes, rv;
-    struct addrinfo hints, *servinfo, *p;
-    char s[INET6_ADDRSTRLEN];
-
-    memset(&hints, 0, sizeof hints);
-    hints.ai_family = AF_UNSPEC;
-    hints.ai_socktype = SOCK_STREAM;
-
-    if ((rv = getaddrinfo(hostname, "8060", &hints, &servinfo)) == 0)
-    {
-        p = servinfo;
-
-        sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
-
-        if (connect(sockfd, p->ai_addr, p->ai_addrlen) == 0)
-            {
-            connect(sockfd, p->ai_addr, p->ai_addrlen);
-
-            inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr), s, sizeof s);
-
-            freeaddrinfo(servinfo);
-
-            send(sockfd, cmd, strlen(cmd), 0);
-
-            close(sockfd);
-        }
-        else
-        {
-
-        }
-    }
-    else
-    {
-
-    }
-
-}
-
-void on_delete_clicked (GtkEntry *object, gpointer user_data)
-{
-    char *cmd = "POST /keypress/Backspace  HTTP/1.1\r\n\r\n";
-
-    GtkWidget  *textEntry = GTK_WIDGET( gtk_builder_get_object( builder, "textentry" ) );
-    char *hostname = g_strdup (gtk_entry_get_text(GTK_ENTRY(textEntry)));
-
-    int sockfd, numbytes, rv;
-    struct addrinfo hints, *servinfo, *p;
-    char s[INET6_ADDRSTRLEN];
-
-    memset(&hints, 0, sizeof hints);
-    hints.ai_family = AF_UNSPEC;
-    hints.ai_socktype = SOCK_STREAM;
-
-    if ((rv = getaddrinfo(hostname, "8060", &hints, &servinfo)) == 0)
-    {
-        p = servinfo;
-
-        sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
-
-        if (connect(sockfd, p->ai_addr, p->ai_addrlen) == 0)
-            {
-            connect(sockfd, p->ai_addr, p->ai_addrlen);
-
-            inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr), s, sizeof s);
-
-            freeaddrinfo(servinfo);
-
-            send(sockfd, cmd, strlen(cmd), 0);
-
-            close(sockfd);
-        }
-        else
-        {
-
-        }
-    }
-    else
-    {
-
-    }
-
-}
-
-void on_space_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("%20", object, user_data);
-}
-
-void on_0_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("0", object, user_data);
-}
-
-void on_1_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("1", object, user_data);
-}
-
-void on_2_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("2", object, user_data);
-}
-
-void on_3_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("3", object, user_data);
-}
-
-void on_4_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("4", object, user_data);
-}
-
-void on_5_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("5", object, user_data);
-}
-
-void on_6_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("6", object, user_data);
-}
-
-void on_7_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("7", object, user_data);
-}
-
-void on_8_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("8", object, user_data);
-}
-
-void on_9_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("9", object, user_data);
-}
-
-void on_a_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("a", object, user_data);
-}
-
-void on_b_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("b", object, user_data);
-}
-
-void on_c_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("c", object, user_data);
-}
-
-void on_d_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("d", object, user_data);
-}
-
-void on_e_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("e", object, user_data);
-}
-
-void on_f_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("f", object, user_data);
-}
-
-void on_g_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("g", object, user_data);
-}
-
-void on_h_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("h", object, user_data);
-}
-
-void on_i_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("i", object, user_data);
-}
-
-void on_j_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("j", object, user_data);
-}
-
-void on_k_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("k", object, user_data);
-}
-
-void on_l_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("l", object, user_data);
-}
-
-void on_m_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("m", object, user_data);
-}
-
-void on_n_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("n", object, user_data);
-}
-
-void on_o_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("o", object, user_data);
-}
-
-void on_p_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("p", object, user_data);
-}
-
-void on_q_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("q", object, user_data);
-}
-
-void on_r_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("r", object, user_data);
-}
-
-void on_s_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("s", object, user_data);
-}
-
-void on_t_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("t", object, user_data);
-}
-
-void on_u_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("u", object, user_data);
-}
-
-void on_v_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("v", object, user_data);
-}
-
-void on_w_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("w", object, user_data);
-}
-
-void on_x_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("x", object, user_data);
-}
-
-void on_y_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("y", object, user_data);
-}
-
-void on_z_clicked (GtkEntry *object, gpointer user_data)
-{
-sendletter ("z", object, user_data);
-}
-
-void sendcommand (char *msg, GtkEntry *object, gpointer user_data)
-{
-    char *press = "press ";
-    char *nline = "\n";
-    char cmd[100];
-
-    strcpy(cmd, press);
-    strcat(cmd, msg);
-    strcat(cmd, nline);
-
-    GtkWidget  *textEntry = GTK_WIDGET( gtk_builder_get_object( builder, "textentry" ) );
-    char *hostname = g_strdup (gtk_entry_get_text(GTK_ENTRY(textEntry)));
-
-    int sockfd, numbytes, rv;
-    struct addrinfo hints, *servinfo, *p;
-    char s[INET6_ADDRSTRLEN];
-
-    memset(&hints, 0, sizeof hints);
-    hints.ai_family = AF_UNSPEC;
-    hints.ai_socktype = SOCK_STREAM;
-
-    if ((rv = getaddrinfo(hostname, "8080", &hints, &servinfo)) == 0)
-    {
-        p = servinfo;
-
-        sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
-
-        if (connect(sockfd, p->ai_addr, p->ai_addrlen) == 0)
-            {
-            connect(sockfd, p->ai_addr, p->ai_addrlen);
-
-            inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr), s, sizeof s);
-
-            freeaddrinfo(servinfo);
-
-            send(sockfd, cmd, strlen(cmd), 0);
-
-            close(sockfd);
-        }
-        else
-        {
-            GtkWidget *bad_hostname;
-            bad_hostname = GTK_WIDGET(gtk_builder_get_object( builder, "bad_hostname" ));
-            gtk_widget_set_visible ( bad_hostname, true);
-   
-        }
-    }
-    else
-    {
-        GtkWidget *bad_address;
-        bad_address = GTK_WIDGET(gtk_builder_get_object( builder, "bad_address" ));
-        gtk_widget_set_visible ( bad_address, true);
-    }
-    
-}
-
-void on_pause_clicked(GtkEntry *object, gpointer user_data)
-{
-    sendcommand("p", object, user_data);
-}
-
-void on_home_clicked(GtkEntry *object, gpointer user_data)
-{
-    sendcommand("h", object, user_data);
-}
-
-void on_up_clicked(GtkEntry *object, gpointer user_data)
-{
-    sendcommand("u", object, user_data);
-}
-
-void on_down_clicked(GtkEntry *object, gpointer user_data)
-{
-    sendcommand("d", object, user_data);
-}
-
-void on_left_clicked(GtkEntry *object, gpointer user_data)
-{
-    sendcommand("l", object, user_data);
-}
-
-void on_right_clicked(GtkEntry *object, gpointer user_data)
-{
-    sendcommand("r", object, user_data);
-}
-
-void on_select_clicked(GtkEntry *object, gpointer user_data)
-{
-    sendcommand("s", object, user_data);
-}
-
-void on_menuback_clicked(GtkEntry *object, gpointer user_data)
-{
-    sendcommand("k", object, user_data);
-}
-
-void on_rwind_clicked(GtkEntry *object, gpointer user_data)
-{
-    sendcommand("b", object, user_data);
-}
-
-void on_ffwd_clicked(GtkEntry *object, gpointer user_data)
-{
-    sendcommand("f", object, user_data);
-}
-
-void on_info_clicked(GtkEntry *object, gpointer user_data)
-{
-    sendcommand("i", object, user_data);
-}
-
-void on_replay_clicked(GtkEntry *object, gpointer user_data)
-{
-    sendcommand("y", object, user_data);
-}
-
+//Windows and dialogs opening and closing
 void on_keyboard_clicked()
 {
     GtkWidget *keywindow;
@@ -464,24 +55,24 @@ void on_close_clicked()
 {
     GtkWidget *keywindow;
     keywindow = GTK_WIDGET(gtk_builder_get_object( builder, "keywindow" ));
-    gtk_widget_set_visible ( keywindow, false);
+    gtk_widget_set_visible ( keywindow, false); 
 }
 
 void close_bad_hostname()
 {
     GtkWidget *bad_hostname;
     bad_hostname = GTK_WIDGET(gtk_builder_get_object( builder, "bad_hostname" ));
-    gtk_widget_set_visible ( bad_hostname, false);
+    gtk_widget_set_visible ( bad_hostname, false); 
 }
 
 void close_bad_address()
 {
     GtkWidget *bad_address;
     bad_address = GTK_WIDGET(gtk_builder_get_object( builder, "bad_address" ));
-    gtk_widget_set_visible ( bad_address, false);
+    gtk_widget_set_visible ( bad_address, false); 
 }
 
-void save_clicked(GtkEntry *object, gpointer user_data)
+void save_clicked()
 {
     GtkWidget  *textEntry = GTK_WIDGET( gtk_builder_get_object( builder, "textentry" ) );
     char *hostname = g_strdup (gtk_entry_get_text(GTK_ENTRY(textEntry)));
@@ -493,8 +84,122 @@ void save_clicked(GtkEntry *object, gpointer user_data)
     FILE *addressfilew;
     addressfilew = fopen(addresspath, "w");
     fputs(hostname, addressfilew);
-    fclose(addressfilew);
+    fclose(addressfilew); 
 }
+
+void on_rokuremote_destroy_event() 
+{
+    gtk_main_quit(); 
+}
+
+//Stuff to actually send commands over the network
+void *get_in_addr(struct sockaddr *sa)
+{
+    if (sa->sa_family == AF_INET) {
+        return &(((struct sockaddr_in*)sa)->sin_addr);
+    }
+
+    return &(((struct sockaddr_in6*)sa)->sin6_addr); 
+}
+
+void sendcmd (char *msg)
+{
+    char *press = "POST /keypress/";
+    char *nline = " HTTP/1.1\r\n\r\n";
+    char cmd[100];
+    strcpy(cmd, press);
+    strcat(cmd, msg);
+    strcat(cmd, nline);
+    GtkWidget  *textEntry = GTK_WIDGET( gtk_builder_get_object( builder, "textentry" ) );
+    char *hostname = g_strdup (gtk_entry_get_text(GTK_ENTRY(textEntry)));
+    int sockfd, numbytes, rv;
+    struct addrinfo hints, *servinfo, *p;
+    char s[INET6_ADDRSTRLEN];
+    memset(&hints, 0, sizeof hints);
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+
+    if ((rv = getaddrinfo(hostname, "8060", &hints, &servinfo)) == 0)
+    {
+        p = servinfo;
+        sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
+
+        if (connect(sockfd, p->ai_addr, p->ai_addrlen) == 0)
+        {
+            connect(sockfd, p->ai_addr, p->ai_addrlen);
+            inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr), s, sizeof s);
+            freeaddrinfo(servinfo);
+            send(sockfd, cmd, strlen(cmd), 0);
+            close(sockfd);
+        }
+        else
+        {
+	    //Tell them we couldn't resolve the name
+            GtkWidget *bad_hostname;
+            bad_hostname = GTK_WIDGET(gtk_builder_get_object( builder, "bad_hostname" ));
+            gtk_widget_set_visible ( bad_hostname, true);
+        }
+    }
+    else
+    {   
+	//Tell them the IP Address is bad, or at least, we couldn't connect
+        GtkWidget *bad_address;
+        bad_address = GTK_WIDGET(gtk_builder_get_object( builder, "bad_address" ));
+        gtk_widget_set_visible ( bad_address, true);
+    }
+}
+
+//All the button clicks
+void on_replay_clicked() { sendcmd("InstantReplay"); }
+void on_delete_clicked() { sendcmd("Backspace"); }
+void on_space_clicked() { sendcmd ("Lit_%20"); }
+void on_select_clicked() { sendcmd("Select"); }
+void on_menuback_clicked() { sendcmd("Back"); }
+void on_right_clicked() { sendcmd("Right"); }
+void on_pause_clicked() { sendcmd("Play"); }
+void on_home_clicked() { sendcmd("Home"); }
+void on_down_clicked() { sendcmd("Down"); }
+void on_left_clicked() { sendcmd("Left"); }
+void on_rwind_clicked() { sendcmd("Rev"); }
+void on_info_clicked() { sendcmd("Info"); }
+void on_ffwd_clicked() { sendcmd("Fwd"); }
+void on_up_clicked() { sendcmd("Up"); }
+void on_0_clicked() { sendcmd ("Lit_0"); }
+void on_1_clicked() { sendcmd ("Lit_1"); }
+void on_2_clicked() { sendcmd ("Lit_2"); }
+void on_3_clicked() { sendcmd ("Lit_3"); }
+void on_4_clicked() { sendcmd ("Lit_4"); }
+void on_5_clicked() { sendcmd ("Lit_5"); }
+void on_6_clicked() { sendcmd ("Lit_6"); }
+void on_7_clicked() { sendcmd ("Lit_7"); }
+void on_8_clicked() { sendcmd ("Lit_8"); }
+void on_9_clicked() { sendcmd ("Lit_9"); }
+void on_a_clicked() { sendcmd ("Lit_a"); }
+void on_b_clicked() { sendcmd ("Lit_b"); }
+void on_c_clicked() { sendcmd ("Lit_c"); }
+void on_d_clicked() { sendcmd ("Lit_d"); }
+void on_e_clicked() { sendcmd ("Lit_e"); }
+void on_f_clicked() { sendcmd ("Lit_f"); }
+void on_g_clicked() { sendcmd ("Lit_g"); }
+void on_h_clicked() { sendcmd ("Lit_h"); }
+void on_i_clicked() { sendcmd ("Lit_i"); }
+void on_j_clicked() { sendcmd ("Lit_j"); }
+void on_k_clicked() { sendcmd ("Lit_k"); }
+void on_l_clicked() { sendcmd ("Lit_l"); }
+void on_m_clicked() { sendcmd ("Lit_m"); }
+void on_n_clicked() { sendcmd ("Lit_n"); }
+void on_o_clicked() { sendcmd ("Lit_o"); }
+void on_p_clicked() { sendcmd ("Lit_p"); }
+void on_q_clicked() { sendcmd ("Lit_q"); }
+void on_r_clicked() { sendcmd ("Lit_r"); }
+void on_s_clicked() { sendcmd ("Lit_s"); }
+void on_t_clicked() { sendcmd ("Lit_t"); }
+void on_u_clicked() { sendcmd ("Lit_u"); }
+void on_v_clicked() { sendcmd ("Lit_v"); }
+void on_w_clicked() { sendcmd ("Lit_w"); }
+void on_x_clicked() { sendcmd ("Lit_x"); }
+void on_y_clicked() { sendcmd ("Lit_y"); }
+void on_z_clicked() { sendcmd ("Lit_z"); }
 
 int
 main( int    argc,
@@ -553,5 +258,4 @@ main( int    argc,
     /* Start main loop */
     gtk_main();
 
-    return( 0 );
-}
+    return( 0 ); }
